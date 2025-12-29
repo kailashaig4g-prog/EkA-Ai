@@ -12,7 +12,7 @@ import { Modal } from '../shared/Modal';
  */
 export const VehicleManager = ({ isOpen, onClose }) => {
   const {
-    vehicles,
+    vehicles = [],
     activeVehicle,
     isLoading,
     error,
@@ -23,6 +23,9 @@ export const VehicleManager = ({ isOpen, onClose }) => {
     setPrimary,
     selectVehicle,
   } = useVehicle();
+
+  // Ensure vehicles is always an array
+  const vehicleList = Array.isArray(vehicles) ? vehicles : [];
 
   const [showForm, setShowForm] = useState(false);
   const [editingVehicle, setEditingVehicle] = useState(null);
