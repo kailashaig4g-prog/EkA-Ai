@@ -1,4 +1,6 @@
 const app = require('./app');
+const http = require('http');
+const socketIO = require('socket.io');
 const connectDB = require('./config/database');
 const { connectRedis } = require('./config/redis');
 const logger = require('./utils/logger');
@@ -25,6 +27,28 @@ process.on('uncaughtException', (err) => {
   process.exit(1);
 });
 
+// Create HTTP server
+const server = http.createServer(app);
+
+// Initialize Socket.IO if enabled
+let io = null;
+if (config.features.websocket) {
+  io = socketIO(server, {
+    cors: {
+      origin: config.cors.origin,
+      credentials: config.cors.credentials,
+    },
+  });
+
+  // Setup socket handlers
+  require('./sockets')(io);
+  
+  // Make io accessible to routes
+  app.set('io', io);
+  
+  logger.info('Socket.IO initialized');
+}
+
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err) => {
   logger.error(`Unhandled Rejection: ${err.message}`);
@@ -33,8 +57,6 @@ process.on('unhandledRejection', (err) => {
 });
 
 // Start server
-let server;
-
 const startServer = async () => {
   try {
     // Connect to MongoDB
@@ -51,9 +73,12 @@ const startServer = async () => {
 
     // Start Express server
     const PORT = config.port;
-    server = app.listen(PORT, () => {
+    server.listen(PORT, () => {
       logger.info(`Server running in ${config.env} mode on port ${PORT}`);
       logger.info(`Health check: http://localhost:${PORT}/health`);
+      if (config.features.websocket) {
+        logger.info(`WebSocket enabled on port ${PORT}`);
+      }
     });
   } catch (error) {
     logger.error(`Failed to start server: ${error.message}`);
@@ -78,4 +103,4 @@ process.on('SIGINT', () => {
 
 startServer();
 
-module.exports = app;
+module.exports = { app, io };

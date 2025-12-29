@@ -8,6 +8,7 @@ const audioRoutes = require('./v1/audioRoutes');
 const visionRoutes = require('./v1/visionRoutes');
 const imageRoutes = require('./v1/imageRoutes');
 const subscriptionRoutes = require('./v1/subscriptionRoutes');
+const adminRoutes = require('./v1/admin');
 
 // Mount routes
 router.use('/auth', authRoutes);
@@ -18,6 +19,7 @@ router.use('/audio', audioRoutes);
 router.use('/vision', visionRoutes);
 router.use('/images', imageRoutes);
 router.use('/subscriptions', subscriptionRoutes);
+router.use('/admin', adminRoutes);
 
 // Root route
 router.get('/', (req, res) => {
@@ -34,6 +36,7 @@ router.get('/', (req, res) => {
       vision: '/api/v1/vision',
       images: '/api/v1/images',
       subscriptions: '/api/v1/subscriptions',
+      admin: '/api/v1/admin',
     },
   });
 });
