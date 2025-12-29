@@ -47,10 +47,17 @@ const mockChatMessage = (overrides = {}) => ({
 
 /**
  * Generate JWT token for testing
+ * IMPORTANT: Only use in test environment with properly configured test secrets
  */
 const generateTestToken = (userId) => {
   const jwt = require('jsonwebtoken');
-  return jwt.sign({ id: userId }, process.env.JWT_SECRET || 'test-secret', {
+  const secret = process.env.JWT_SECRET;
+  
+  if (!secret && process.env.NODE_ENV !== 'test') {
+    throw new Error('JWT_SECRET must be set for token generation');
+  }
+  
+  return jwt.sign({ id: userId }, secret || 'test-secret-key-do-not-use-in-production', {
     expiresIn: '1h',
   });
 };

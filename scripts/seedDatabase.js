@@ -18,7 +18,13 @@ const seedDatabase = async () => {
 
     // Create admin user
     console.log('Creating admin user...');
-    const adminPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD || 'Admin123!', 12);
+    
+    if (!process.env.ADMIN_PASSWORD) {
+      console.error('ERROR: ADMIN_PASSWORD environment variable must be set');
+      process.exit(1);
+    }
+    
+    const adminPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, 12);
     const admin = await User.create({
       name: 'Admin User',
       email: process.env.ADMIN_EMAIL || 'admin@eka-ai.com',
@@ -69,7 +75,7 @@ const seedDatabase = async () => {
     console.log('Sample vehicles created!');
     console.log('\nSeed data created successfully!');
     console.log('\nCredentials:');
-    console.log('Admin - Email:', admin.email, 'Password:', process.env.ADMIN_PASSWORD || 'Admin123!');
+    console.log('Admin - Email:', admin.email, 'Password: [Set via ADMIN_PASSWORD]');
     console.log('User - Email:', user.email, 'Password: User123!');
 
     await mongoose.connection.close();
