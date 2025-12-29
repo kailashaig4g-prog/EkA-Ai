@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to EkA-Ai</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+        .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
+        .button { display: inline-block; padding: 12px 30px; background: #667eea; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+        .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚗 Welcome to EkA-Ai!</h1>
+    </div>
+    <div class="content">
+        <h2>Hi {{name}}! 👋</h2>
+        <p>Welcome aboard! We're thrilled to have you join the EkA-Ai family.</p>
+        <p>EkA-Ai is your intelligent automotive assistant powered by cutting-edge AI technology. Here's what you can do:</p>
+        <ul>
+            <li>💬 Get instant answers to car-related questions</li>
+            <li>🔍 Analyze vehicle damage with AI vision</li>
+            <li>🗣️ Use voice commands for hands-free assistance</li>
+            <li>📊 Track your vehicle's service history</li>
+            <li>🔧 Find nearby workshops and service centers</li>
+        </ul>
+        <p>Ready to get started?</p>
+        <a href="{{dashboardUrl}}" class="button">Go to Dashboard</a>
+        <p>If you have any questions, feel free to reach out to our support team.</p>
+        <p>Happy motoring!<br>The EkA-Ai Team</p>
+    </div>
+    <div class="footer">
+        <p>© 2024 EkA-Ai. All rights reserved.</p>
+        <p>You're receiving this email because you signed up for EkA-Ai.</p>
+    </div>
+</body>
+</html>

@@ -7,6 +7,7 @@ const serviceHistoryRoutes = require('./v1/serviceHistoryRoutes');
 const audioRoutes = require('./v1/audioRoutes');
 const visionRoutes = require('./v1/visionRoutes');
 const imageRoutes = require('./v1/imageRoutes');
+const subscriptionRoutes = require('./v1/subscriptionRoutes');
 
 // Mount routes
 router.use('/auth', authRoutes);
@@ -16,6 +17,7 @@ router.use('/service-history', serviceHistoryRoutes);
 router.use('/audio', audioRoutes);
 router.use('/vision', visionRoutes);
 router.use('/images', imageRoutes);
+router.use('/subscriptions', subscriptionRoutes);
 
 // Root route
 router.get('/', (req, res) => {
@@ -31,6 +33,7 @@ router.get('/', (req, res) => {
       audio: '/api/v1/audio',
       vision: '/api/v1/vision',
       images: '/api/v1/images',
+      subscriptions: '/api/v1/subscriptions',
     },
   });
 });
