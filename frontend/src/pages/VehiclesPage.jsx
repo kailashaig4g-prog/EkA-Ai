@@ -59,7 +59,7 @@ export const VehiclesPage = () => {
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
             </svg>
           </div>
-        ) : vehicles.length === 0 ? (
+        ) : vehicleList.length === 0 ? (
           <div
             className="text-center py-12 rounded-2xl"
             style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border)' }}
