@@ -13,7 +13,7 @@ const logger = require('../utils/logger');
 const sendMessage = asyncHandler(async (req, res) => {
   const { message, conversationHistory, vehicleId } = req.body;
 
-  let context = {};
+  const context = {};
 
   // Get vehicle context if provided
   if (vehicleId) {
