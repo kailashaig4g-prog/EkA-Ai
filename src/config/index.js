@@ -89,7 +89,7 @@ module.exports = {
     origin: process.env.CORS_ORIGIN
       ? process.env.CORS_ORIGIN.split(',')
       : ['http://localhost:3000', 'http://localhost:5000'],
-    credentials: process.env.CORS_CREDENTIALS === 'true',
+    credentials: process.env.CORS_CREDENTIALS !== 'false',
   },
 
   // Logging

@@ -20,6 +20,15 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
+// Create uploads subdirectories if they don't exist
+const uploadsSubDirs = ['audio', 'images', 'vision'];
+uploadsSubDirs.forEach(subDir => {
+  const subDirPath = path.join(uploadsDir, subDir);
+  if (!fs.existsSync(subDirPath)) {
+    fs.mkdirSync(subDirPath, { recursive: true });
+  }
+});
+
 // Handle uncaught exceptions
 process.on('uncaughtException', (err) => {
   logger.error(`Uncaught Exception: ${err.message}`);
@@ -55,6 +64,14 @@ process.on('unhandledRejection', (err) => {
   logger.error(err.stack);
   server.close(() => process.exit(1));
 });
+
+// Validate critical environment variables
+const requiredEnvVars = ['OPENAI_API_KEY', 'MONGODB_URI', 'JWT_SECRET'];
+const missingVars = requiredEnvVars.filter(v => !process.env[v]);
+if (missingVars.length > 0) {
+  logger.error(`Missing required environment variables: ${missingVars.join(', ')}`);
+  process.exit(1);
+}
 
 // Start server
 const startServer = async () => {
