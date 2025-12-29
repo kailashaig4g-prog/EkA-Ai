@@ -1,14 +1,113 @@
+@import './styles/theme.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: var(--border);
   }
   
   body {
-    @apply bg-background text-foreground;
+    @apply bg-[var(--bg-primary)] text-[var(--text-primary)];
+    font-family: var(--font-family);
+  }
+}
+
+@layer components {
+  /* Button Variants */
+  .btn-primary {
+    @apply px-4 py-2 rounded-xl font-medium transition-all duration-200;
+    background-color: var(--brand-primary);
+    color: var(--text-inverse);
+  }
+  
+  .btn-primary:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+  }
+  
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+  
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  .btn-secondary {
+    @apply px-4 py-2 rounded-xl font-medium transition-all duration-200;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+  }
+  
+  .btn-secondary:hover {
+    background-color: var(--bg-hover);
+  }
+  
+  /* Card Styles */
+  .card {
+    @apply rounded-2xl p-6 transition-all duration-200;
+    background-color: var(--bg-card);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-light);
+  }
+  
+  .card:hover {
+    box-shadow: var(--shadow-lg);
+  }
+  
+  /* Input Styles */
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl transition-all duration-200;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+  }
+  
+  .input-field:focus {
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px rgba(87, 6, 131, 0.1);
+    outline: none;
+  }
+  
+  .input-field::placeholder {
+    color: var(--text-tertiary);
+  }
+  
+  /* Chat Message Bubbles */
+  .message-user {
+    @apply rounded-2xl rounded-br-md px-4 py-3;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+  
+  .message-ai {
+    @apply px-4 py-3;
+    color: var(--text-primary);
+  }
+  
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  
+  .badge-primary {
+    background-color: rgba(87, 6, 131, 0.1);
+    color: var(--brand-primary);
+  }
+  
+  .badge-success {
+    background-color: rgba(65, 126, 70, 0.1);
+    color: var(--brand-secondary);
+  }
+  
+  .badge-warning {
+    background-color: rgba(223, 140, 77, 0.1);
+    color: var(--brand-accent);
   }
 }
 
@@ -20,5 +119,9 @@
   
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+  
+  .text-balance {
+    text-wrap: balance;
   }
 }
