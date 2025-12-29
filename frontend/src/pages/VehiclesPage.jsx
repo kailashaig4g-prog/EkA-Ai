@@ -6,7 +6,7 @@ import { useVehicle } from '../contexts/VehicleContext';
 
 export const VehiclesPage = () => {
   const {
-    vehicles,
+    vehicles = [],
     activeVehicle,
     isLoading,
     selectVehicle,
@@ -21,6 +21,9 @@ export const VehiclesPage = () => {
     setEditingVehicle(vehicle);
     setShowManager(true);
   };
+
+  // Ensure vehicles is always an array
+  const vehicleList = Array.isArray(vehicles) ? vehicles : [];
 
   return (
     <Dashboard>
