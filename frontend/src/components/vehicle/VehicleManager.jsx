@@ -116,7 +116,7 @@ export const VehicleManager = ({ isOpen, onClose }) => {
               <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
                 {showForm
                   ? 'Fill in your vehicle details'
-                  : `${vehicles.length} vehicle${vehicles.length !== 1 ? 's' : ''} registered`
+                  : `${vehicleList.length} vehicle${vehicleList.length !== 1 ? 's' : ''} registered`
                 }
               </p>
             </div>
@@ -155,7 +155,7 @@ export const VehicleManager = ({ isOpen, onClose }) => {
           ) : (
             <>
               {/* Vehicle Grid */}
-              {vehicles.length === 0 ? (
+              {vehicleList.length === 0 ? (
                 <div className="text-center py-12">
                   <div
                     className="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center"
@@ -197,7 +197,7 @@ export const VehicleManager = ({ isOpen, onClose }) => {
 
                   {/* Vehicle Cards Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-2">
-                    {vehicles.map((vehicle) => (
+                    {vehicleList.map((vehicle) => (
                       <VehicleCard
                         key={vehicle._id}
                         vehicle={vehicle}
