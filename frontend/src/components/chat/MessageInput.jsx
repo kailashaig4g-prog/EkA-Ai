@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect, memo } from 'react';
+import { VoiceInput } from './VoiceInput';
 
 /**
  * MessageInput - Chat input with auto-expand, attachments, and voice
@@ -100,6 +101,15 @@ export const MessageInput = memo(({
     fileInputRef.current?.click();
   }, []);
 
+  // Handle voice transcription
+  const handleVoiceTranscription = useCallback((transcription) => {
+    if (transcription) {
+      setText((prev) => prev + (prev ? ' ' : '') + transcription);
+      // Focus the textarea
+      textareaRef.current?.focus();
+    }
+  }, []);
+
   const canSend = (text.trim() || imageFile) && !disabled && !isStreaming;
 
   return (
@@ -174,6 +184,12 @@ export const MessageInput = memo(({
             className="flex-1 bg-transparent border-none outline-none resize-none text-[15px] leading-relaxed placeholder:text-[var(--text-tertiary)] disabled:opacity-50"
             style={{ color: 'var(--text-primary)', minHeight: '24px', maxHeight: '200px' }}
             data-testid="message-input"
+          />
+
+          {/* Voice Input Button */}
+          <VoiceInput
+            onTranscription={handleVoiceTranscription}
+            disabled={disabled || isStreaming}
           />
 
           {/* Send / Stop Button */}
