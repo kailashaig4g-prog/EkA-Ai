@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Reminder</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+        .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
+        .vehicle-info { background: white; padding: 20px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #667eea; }
+        .button { display: inline-block; padding: 12px 30px; background: #667eea; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+        .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
+        .highlight { background: #fffbcc; padding: 10px; border-radius: 5px; margin: 15px 0; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔧 Service Reminder</h1>
+    </div>
+    <div class="content">
+        <h2>Hi {{name}}!</h2>
+        <p>It's time for scheduled maintenance on your vehicle.</p>
+        
+        <div class="vehicle-info">
+            <h3>Vehicle Details</h3>
+            <p><strong>Make:</strong> {{vehicleMake}}</p>
+            <p><strong>Model:</strong> {{vehicleModel}}</p>
+            <p><strong>Year:</strong> {{vehicleYear}}</p>
+            <p><strong>Current Mileage:</strong> {{mileage}} miles</p>
+        </div>
+
+        <div class="highlight">
+            <p><strong>Service Type:</strong> {{serviceType}}</p>
+        </div>
+
+        <p>Regular maintenance is essential to keep your vehicle running smoothly and to prevent costly repairs down the road.</p>
+
+        <p>What you can do next:</p>
+        <ul>
+            <li>🔍 Find nearby workshops using our workshop locator</li>
+            <li>📅 Schedule a service appointment</li>
+            <li>💬 Chat with our AI for maintenance advice</li>
+        </ul>
+
+        <a href="{{dashboardUrl}}" class="button">Manage Vehicle</a>
+
+        <p>Stay safe on the road!<br>The EkA-Ai Team</p>
+    </div>
+    <div class="footer">
+        <p>© 2024 EkA-Ai. All rights reserved.</p>
+        <p>You're receiving this email because you enabled service reminders.</p>
+    </div>
+</body>
+</html>
