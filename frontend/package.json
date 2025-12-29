@@ -22,6 +22,7 @@
     "eslint-plugin-react": "^7.33.2"
   },
   "scripts": {
+    "start": "vite --host 0.0.0.0 --port 3000",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
