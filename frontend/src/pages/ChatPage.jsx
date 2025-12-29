@@ -2,13 +2,16 @@ import { useState } from 'react';
 import { ChatInterface } from '../components/chat/ChatInterface';
 import { Sidebar } from '../components/dashboard/Sidebar';
 import { Header } from '../components/dashboard/Header';
+import { useVehicle } from '../contexts/VehicleContext';
+import { VehicleManager } from '../components/vehicle/VehicleManager';
 
 /**
  * ChatPage - Main chat page with sidebar layout
  */
 export const ChatPage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [activeVehicle, setActiveVehicle] = useState(null);
+  const [showVehicleManager, setShowVehicleManager] = useState(false);
+  const { activeVehicle, selectVehicle, vehicles } = useVehicle();
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -32,7 +35,9 @@ export const ChatPage = () => {
         >
           <Sidebar
             activeVehicle={activeVehicle}
-            onSelectVehicle={setActiveVehicle}
+            vehicles={vehicles}
+            onSelectVehicle={selectVehicle}
+            onManageVehicles={() => setShowVehicleManager(true)}
             isOpen={sidebarOpen}
           />
         </div>
@@ -45,6 +50,12 @@ export const ChatPage = () => {
           />
         </main>
       </div>
+
+      {/* Vehicle Manager Modal */}
+      <VehicleManager
+        isOpen={showVehicleManager}
+        onClose={() => setShowVehicleManager(false)}
+      />
     </div>
   );
 };
