@@ -1,9 +1,10 @@
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
+import { LanguageSelector } from '../common/LanguageSelector';
 
 /**
- * Header - Top navigation bar with theme toggle
+ * Header - Top navigation bar with theme toggle and language selector
  */
 export const Header = ({ onToggleSidebar }) => {
   const { user, logout } = useAuth();
@@ -29,7 +30,7 @@ export const Header = ({ onToggleSidebar }) => {
         {/* Sidebar Toggle */}
         <button
           onClick={onToggleSidebar}
-          className="p-2 rounded-xl hover:bg-[var(--bg-hover)] transition-colors lg:hidden"
+          className="p-2 rounded-xl hover:bg-[var(--bg-hover)] transition-colors"
           data-testid="sidebar-toggle"
         >
           <svg className="w-5 h-5" style={{ color: 'var(--text-secondary)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -56,6 +57,9 @@ export const Header = ({ onToggleSidebar }) => {
 
       {/* Right Section */}
       <div className="flex items-center gap-2">
+        {/* Language Selector */}
+        <LanguageSelector />
+
         {/* Theme Toggle */}
         <button
           onClick={toggleDarkMode}
