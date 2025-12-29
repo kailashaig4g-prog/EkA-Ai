@@ -1,15 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { protect } = require('../middleware/auth');
-const validate = require('../middleware/validation');
-const { mongoIdValidator } = require('../utils/validators');
+const { protect } = require('../../middleware/auth');
+const validate = require('../../middleware/validation');
+const { mongoIdValidator } = require('../../utils/validators');
 const {
   getServiceHistory,
   getServiceRecord,
   createServiceRecord,
   updateServiceRecord,
   deleteServiceRecord,
-} = require('../controllers/serviceHistoryController');
+} = require('../../controllers/serviceHistoryController');
 
 // Service history for specific vehicle
 router.get('/vehicles/:vehicleId/service-history', protect, getServiceHistory);
