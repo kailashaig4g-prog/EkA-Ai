@@ -1,7 +1,6 @@
 const openaiService = require('../services/openaiService');
 const logger = require('../utils/logger');
 const fs = require('fs');
-const path = require('path');
 
 /**
  * @desc    Transcribe audio using Whisper API

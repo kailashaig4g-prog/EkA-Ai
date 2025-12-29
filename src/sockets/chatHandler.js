@@ -2,7 +2,7 @@ const openaiService = require('../services/openaiService');
 const Vehicle = require('../models/Vehicle');
 const logger = require('../utils/logger');
 
-module.exports = (socket, io) => {
+module.exports = (socket, _io) => {
   socket.on('chat:stream', async (data) => {
     try {
       const { message, conversationHistory, vehicleId } = data;

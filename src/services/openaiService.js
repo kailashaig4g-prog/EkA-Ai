@@ -2,7 +2,6 @@ const OpenAI = require('openai');
 const config = require('../config');
 const logger = require('../utils/logger');
 const { OPENAI } = require('../utils/constants');
-const fs = require('fs');
 
 class OpenAIService {
   constructor() {

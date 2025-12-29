@@ -471,7 +471,7 @@ class PaymentService {
   /**
    * Handle payment captured (Razorpay)
    */
-  async handlePaymentCaptured(paymentData, provider) {
+  async handlePaymentCaptured(paymentData, _provider) {
     try {
       // Find associated order and update invoice
       const invoice = await Invoice.findOne({

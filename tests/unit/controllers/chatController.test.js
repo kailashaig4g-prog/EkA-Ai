@@ -1,7 +1,7 @@
 const request = require('supertest');
 const app = require('../../../src/app');
 const { mockOpenAI } = require('../../mocks/openaiMock');
-const { generateTestToken, mockUser } = require('../../helpers/mockData');
+const { generateTestToken } = require('../../helpers/mockData');
 
 // Mock OpenAI
 jest.mock('openai', () => {

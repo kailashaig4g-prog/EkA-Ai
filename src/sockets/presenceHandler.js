@@ -2,7 +2,7 @@ const logger = require('../utils/logger');
 
 const onlineUsers = new Map();
 
-module.exports = (socket, io) => {
+module.exports = (socket, _io) => {
   socket.on('presence:online', () => {
     onlineUsers.set(socket.userId, {
       socketId: socket.id,

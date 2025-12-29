@@ -1,6 +1,6 @@
 const logger = require('../utils/logger');
 
-module.exports = (socket, io) => {
+module.exports = (socket, _io) => {
   socket.on('notification:subscribe', (data) => {
     const { channels } = data;
     

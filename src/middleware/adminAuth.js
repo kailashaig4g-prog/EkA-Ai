@@ -65,7 +65,7 @@ exports.adminAuth = async (req, res, next) => {
 /**
  * Check if user has specific admin permission
  */
-exports.checkPermission = (permission) => {
+exports.checkPermission = (_permission) => {
   return (req, res, next) => {
     if (!req.user || req.user.role !== 'admin') {
       return res.status(403).json({
