@@ -1,4 +1,3 @@
-const rateLimit = require('express-rate-limit');
 const { authLimiter, apiLimiter } = require('../../../src/middleware/rateLimiter');
 
 describe('Rate Limiter Middleware', () => {
