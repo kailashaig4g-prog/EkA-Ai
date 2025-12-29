@@ -88,8 +88,12 @@ module.exports = {
   cors: {
     origin: process.env.CORS_ORIGIN
       ? process.env.CORS_ORIGIN.split(',')
-      : ['http://localhost:3000', 'http://localhost:5000'],
-    credentials: process.env.CORS_CREDENTIALS === 'true',
+      : [
+          'http://localhost:3000',
+          'http://localhost:5000',
+          'https://eka-garage.preview.emergentagent.com',
+        ],
+    credentials: process.env.CORS_CREDENTIALS !== 'false',
   },
 
   // Logging
