@@ -1,7 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { useState, useEffect } from 'react';
-import { vehicleApi } from '../../api/vehicleApi';
 
 const NavItem = ({ to, icon, label, isActive }) => (
   <NavLink
@@ -26,33 +24,9 @@ const NavItem = ({ to, icon, label, isActive }) => (
 /**
  * Sidebar - Navigation with conversation history and vehicle selector
  */
-export const Sidebar = ({ activeVehicle, onSelectVehicle, isOpen }) => {
+export const Sidebar = ({ activeVehicle, vehicles = [], onSelectVehicle, onManageVehicles, isOpen }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const [vehicles, setVehicles] = useState([]);
-  const [loadingVehicles, setLoadingVehicles] = useState(false);
-
-  // Load vehicles on mount
-  useEffect(() => {
-    const loadVehicles = async () => {
-      setLoadingVehicles(true);
-      try {
-        const response = await vehicleApi.getVehicles();
-        const vehicleList = response.data || [];
-        setVehicles(vehicleList);
-        // Set first vehicle as active if none selected
-        if (!activeVehicle && vehicleList.length > 0) {
-          onSelectVehicle(vehicleList[0]);
-        }
-      } catch (error) {
-        console.error('Failed to load vehicles:', error);
-      } finally {
-        setLoadingVehicles(false);
-      }
-    };
-
-    loadVehicles();
-  }, []);
 
   const handleLogout = async () => {
     await logout();
@@ -122,16 +96,16 @@ export const Sidebar = ({ activeVehicle, onSelectVehicle, isOpen }) => {
       </nav>
 
       {/* Active Vehicle Card */}
-      {vehicles.length > 0 && (
-        <div className="px-4 py-3 border-t" style={{ borderColor: 'var(--border)' }}>
-          <p className="text-xs font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>
-            Active Vehicle
-          </p>
+      <div className="px-4 py-3 border-t" style={{ borderColor: 'var(--border)' }}>
+        <p className="text-xs font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>
+          Active Vehicle
+        </p>
+        {vehicles.length > 0 ? (
           <select
             value={activeVehicle?._id || ''}
             onChange={(e) => {
               const vehicle = vehicles.find((v) => v._id === e.target.value);
-              onSelectVehicle(vehicle);
+              onSelectVehicle?.(vehicle);
             }}
             className="w-full px-3 py-2 rounded-xl text-sm transition-colors"
             style={{
@@ -148,8 +122,23 @@ export const Sidebar = ({ activeVehicle, onSelectVehicle, isOpen }) => {
               </option>
             ))}
           </select>
-        </div>
-      )}
+        ) : (
+          <button
+            onClick={onManageVehicles}
+            className="w-full px-3 py-2 rounded-xl text-sm transition-colors text-left flex items-center gap-2"
+            style={{
+              backgroundColor: 'var(--bg-secondary)',
+              border: '1px solid var(--border)',
+              color: 'var(--text-secondary)',
+            }}
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+            Add a vehicle
+          </button>
+        )}
+      </div>
 
       {/* User Profile Section */}
       <div
