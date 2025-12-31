@@ -312,7 +312,7 @@ class EKAAPITester:
         }
         
         success, response = self.run_test(
-            "Create Support Ticket", "POST", "support/tickets", 200, ticket_data
+            "Create Support Ticket", "POST", "support/tickets", 201, ticket_data
         )
         
         if success:
