@@ -793,6 +793,51 @@ async def get_products():
     ]
 
 
+# ==================== PROMOTIONS ROUTES ====================
+
+class PromoCreate(BaseModel):
+    title: str
+    description: str
+    badge: str
+    discount_percent: Optional[int] = None
+    valid_until: Optional[str] = None
+    is_active: bool = True
+
+@api_router.get("/promotions")
+async def get_promotions():
+    """Get active promotional offers - public endpoint"""
+    promos = await db.promotions.find({"is_active": True}, {"_id": 0}).to_list(20)
+    
+    # Return default promos if none in database
+    if not promos:
+        promos = [
+            {"id": "1", "title": "50% OFF on URGAA Plans", "description": "Premium EV charging analytics at half price", "badge": "LIMITED", "discount_percent": 50, "is_active": True},
+            {"id": "2", "title": "Free Training Modules", "description": "Complete 3 courses, get certified free", "badge": "NEW", "discount_percent": 100, "is_active": True},
+            {"id": "3", "title": "GST Filing Support", "description": "Automated compliance for workshops", "badge": "POPULAR", "discount_percent": 30, "is_active": True},
+            {"id": "4", "title": "EV Station Setup", "description": "Complete station installation package", "badge": "HOT", "discount_percent": 25, "is_active": True},
+        ]
+    return promos
+
+@api_router.post("/promotions")
+async def create_promotion(promo: PromoCreate, current_user: dict = Depends(get_current_user)):
+    """Create a new promotional offer"""
+    promo_id = str(uuid.uuid4())
+    promo_data = {
+        "id": promo_id,
+        **promo.dict(),
+        "created_by": current_user["id"],
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.promotions.insert_one(promo_data)
+    return {"id": promo_id, "status": "created"}
+
+@api_router.delete("/promotions/{promo_id}")
+async def delete_promotion(promo_id: str, current_user: dict = Depends(get_current_user)):
+    """Delete a promotional offer"""
+    await db.promotions.delete_one({"id": promo_id})
+    return {"status": "deleted"}
+
+
 # ==================== ROOT & HEALTH ====================
 
 @api_router.get("/")
