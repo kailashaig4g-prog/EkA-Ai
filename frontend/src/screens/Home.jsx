@@ -320,7 +320,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t border-white/5 mt-12 py-6">
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between text-white/40 text-sm">
-          <p>© 2025 Go4Garage. Powered by Kailash-Ai.in</p>
+          <p>© 2025 Go4Garage. Powered by Kailash-Ai</p>
           <p>Secured by GANESHA</p>
         </div>
       </footer>
