@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { 
   Zap, Car, Users, GraduationCap, 
   TrendingUp, Scale, Headphones, Settings,
-  ChevronRight, Search, Bell, LogOut,
+  ChevronRight, Search, LogOut,
   MessageSquare, Building2
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
@@ -19,7 +19,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../components/ui/dropdown-menu';
+import NotificationCenter from '../components/NotificationCenter';
 import useAuthStore from '../store/authStore';
+import { useSocket } from '../hooks/useSocket';
 import { generalAPI } from '../services/api';
 
 const products = [
@@ -84,6 +86,9 @@ export default function Home() {
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
   const [currentTime, setCurrentTime] = useState(new Date());
+  
+  // Initialize socket connection
+  useSocket();
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -139,10 +144,7 @@ export default function Home() {
             </div>
 
             <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon" className="relative" data-testid="notifications-btn">
-                <Bell className="w-5 h-5" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-[#FF6B35] rounded-full" />
-              </Button>
+              <NotificationCenter />
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
