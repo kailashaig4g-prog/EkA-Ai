@@ -412,7 +412,8 @@ class EKAAPITester:
         if self.failed_tests:
             self.log("❌ Failed Tests:")
             for test in self.failed_tests:
-                self.log(f"   - {test['test']}: {test.get('error', f\"Status {test.get('actual')} != {test.get('expected')}\")}")
+                error_msg = test.get('error', f"Status {test.get('actual')} != {test.get('expected')}")
+                self.log(f"   - {test['test']}: {error_msg}")
         
         success_rate = (self.tests_passed / self.tests_run * 100) if self.tests_run > 0 else 0
         self.log(f"✅ Success Rate: {success_rate:.1f}%")
