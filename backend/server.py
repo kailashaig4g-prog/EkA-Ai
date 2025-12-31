@@ -452,6 +452,20 @@ IMPORTANT: You are responding about Go4Garage services including:
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
     
+    # Emit real-time pipeline update - delivered
+    asyncio.create_task(emit_pipeline_update(question_id, "delivered", {
+        "answer": answer,
+        "provenance": provenance
+    }))
+    
+    # Send notification to user
+    asyncio.create_task(emit_notification(current_user["id"], {
+        "type": "ai_response",
+        "title": "AI Response Ready",
+        "message": f"Your question has been answered by {agent_name}",
+        "question_id": question_id
+    }))
+    
     # Save to database
     chat_record = {
         "id": question_id,
@@ -480,6 +494,63 @@ async def get_chat_history(current_user: dict = Depends(get_current_user)):
         {"_id": 0}
     ).sort("created_at", -1).limit(50).to_list(50)
     return history
+
+
+# ==================== NOTIFICATIONS ROUTES ====================
+
+class NotificationCreate(BaseModel):
+    type: str
+    title: str
+    message: str
+    data: Optional[dict] = None
+
+@api_router.get("/notifications")
+async def get_notifications(current_user: dict = Depends(get_current_user)):
+    """Get user notifications"""
+    notifications = await db.notifications.find(
+        {"user_id": current_user["id"]},
+        {"_id": 0}
+    ).sort("created_at", -1).limit(50).to_list(50)
+    return notifications
+
+@api_router.post("/notifications/read/{notification_id}")
+async def mark_notification_read(notification_id: str, current_user: dict = Depends(get_current_user)):
+    """Mark notification as read"""
+    await db.notifications.update_one(
+        {"id": notification_id, "user_id": current_user["id"]},
+        {"$set": {"read": True}}
+    )
+    return {"status": "ok"}
+
+@api_router.post("/notifications/broadcast")
+async def broadcast_notification(notification: NotificationCreate, current_user: dict = Depends(get_current_user)):
+    """Broadcast notification to all connected clients (admin only)"""
+    await sio.emit('notification', {
+        "type": notification.type,
+        "title": notification.title,
+        "message": notification.message,
+        "data": notification.data,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    })
+    return {"status": "broadcasted"}
+
+@api_router.post("/notifications/station-alert")
+async def send_station_alert(station_id: str, alert_type: str, message: str, current_user: dict = Depends(get_current_user)):
+    """Send station alert"""
+    await emit_station_alert(station_id, alert_type, message)
+    
+    # Store alert in database
+    alert = {
+        "id": str(uuid.uuid4()),
+        "station_id": station_id,
+        "alert_type": alert_type,
+        "message": message,
+        "created_by": current_user["id"],
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.station_alerts.insert_one(alert)
+    
+    return {"status": "alert_sent", "alert_id": alert["id"]}
 
 
 # ==================== JOB CARD ROUTES ====================
