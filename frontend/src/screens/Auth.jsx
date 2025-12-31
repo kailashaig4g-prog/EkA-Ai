@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Shield } from 'lucide-react';
+import { Eye, EyeOff, Shield, Zap, Car, Users, GraduationCap, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
@@ -8,18 +8,42 @@ import { authAPI } from '../services/api';
 import useAuthStore from '../store/authStore';
 import { toast } from 'sonner';
 
+const offerings = [
+  { icon: Zap, title: 'EV Charging', desc: 'Smart station management' },
+  { icon: Car, title: 'Workshop Ops', desc: 'GST compliant job cards' },
+  { icon: Users, title: 'Customer Intel', desc: 'Churn prediction & insights' },
+  { icon: GraduationCap, title: 'Training', desc: 'Certifications & courses' },
+  { icon: Shield, title: 'Compliance', desc: 'Legal & regulatory tools' },
+  { icon: Sparkles, title: 'AI Powered', desc: 'KAILASH intelligence engine' },
+];
+
+const promoSlides = [
+  { title: '50% OFF on URGAA Plans', desc: 'Get premium EV charging analytics at half price', badge: 'LIMITED TIME' },
+  { title: 'Free Training Modules', desc: 'Complete 3 courses and get certified for free', badge: 'NEW' },
+  { title: 'GST Filing Support', desc: 'Automated GST compliance for workshops', badge: 'POPULAR' },
+];
+
 export default function Auth() {
   const navigate = useNavigate();
   const { login } = useAuthStore();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     name: '',
     department: 'DEPT_TECHNOLOGY',
   });
+
+  // Auto-rotate slides
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % promoSlides.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,45 +67,165 @@ export default function Auth() {
     }
   };
 
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % promoSlides.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + promoSlides.length) % promoSlides.length);
+
   return (
-    <div className="min-h-screen bg-[#0a0a0a] flex relative overflow-hidden" data-testid="auth-page">
-      {/* Logo - Top Right */}
-      <div className="absolute top-6 right-6 z-50">
-        <img 
-          src="https://customer-assets.emergentagent.com/job_b9cc3aae-509a-4338-a133-5fb13a3b9f93/artifacts/oksiful9_Logo%20for%20website.png"
-          alt="Go4Garage Logo"
-          className="h-12 w-auto"
-          data-testid="logo"
-        />
+    <div className="min-h-screen bg-[#0a0a0a] flex" data-testid="auth-page">
+      {/* Left Side - Marketing & Promotions */}
+      <div className="hidden lg:flex lg:w-[55%] flex-col p-8 relative">
+        {/* Logo */}
+        <div className="flex items-center gap-3 mb-10">
+          <img 
+            src="https://customer-assets.emergentagent.com/job_b9cc3aae-509a-4338-a133-5fb13a3b9f93/artifacts/oksiful9_Logo%20for%20website.png"
+            alt="Go4Garage"
+            className="h-10 w-auto"
+            data-testid="logo"
+          />
+        </div>
+
+        {/* Hero Text */}
+        <div className="mb-10">
+          <h1 className="font-poppins text-4xl lg:text-5xl font-bold text-white leading-tight mb-4">
+            Enterprise Intelligence<br />
+            <span className="text-[#FF6B35]">Made Simple</span>
+          </h1>
+          <p className="text-white/60 text-lg max-w-md">
+            Unified platform for EV charging, workshop operations, customer analytics & employee training.
+          </p>
+        </div>
+
+        {/* Our Offerings - 6 Boxes */}
+        <div className="mb-8">
+          <h2 className="text-white/50 text-sm font-medium uppercase tracking-wider mb-4">Our Offerings</h2>
+          <div className="grid grid-cols-3 gap-3">
+            {offerings.map((item, index) => (
+              <div 
+                key={index}
+                className="bg-[#FF6B35]/10 border border-[#FF6B35]/20 rounded-xl p-4 hover:bg-[#FF6B35]/20 transition-all cursor-pointer group"
+                data-testid={`offering-${index}`}
+              >
+                <item.icon className="w-6 h-6 text-[#FF6B35] mb-2 group-hover:scale-110 transition-transform" />
+                <h3 className="text-white font-medium text-sm mb-0.5">{item.title}</h3>
+                <p className="text-white/50 text-xs">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Promo Slider */}
+        <div className="mt-auto">
+          <div className="relative bg-gradient-to-r from-[#1a1a1a] to-[#0a0a0a] border border-white/10 rounded-2xl p-6 overflow-hidden">
+            {/* Slide Content */}
+            <div className="relative z-10">
+              <span className="inline-block px-2 py-1 bg-[#FF6B35] text-white text-xs font-medium rounded mb-3">
+                {promoSlides[currentSlide].badge}
+              </span>
+              <h3 className="text-white text-xl font-semibold mb-2">{promoSlides[currentSlide].title}</h3>
+              <p className="text-white/60 text-sm">{promoSlides[currentSlide].desc}</p>
+            </div>
+
+            {/* Navigation */}
+            <div className="flex items-center justify-between mt-4">
+              <div className="flex gap-1.5">
+                {promoSlides.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentSlide(idx)}
+                    className={`w-2 h-2 rounded-full transition-all ${
+                      idx === currentSlide ? 'bg-[#FF6B35] w-6' : 'bg-white/30'
+                    }`}
+                    data-testid={`slide-dot-${idx}`}
+                  />
+                ))}
+              </div>
+              <div className="flex gap-2">
+                <button 
+                  onClick={prevSlide}
+                  className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
+                  data-testid="prev-slide"
+                >
+                  <ChevronLeft className="w-4 h-4 text-white" />
+                </button>
+                <button 
+                  onClick={nextSlide}
+                  className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
+                  data-testid="next-slide"
+                >
+                  <ChevronRight className="w-4 h-4 text-white" />
+                </button>
+              </div>
+            </div>
+
+            {/* Decorative gradient */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF6B35]/20 rounded-full blur-3xl" />
+          </div>
+
+          {/* Footer Links */}
+          <div className="flex items-center gap-6 mt-6 text-white/40 text-sm">
+            <a href="#" className="hover:text-white transition-colors">Contact</a>
+            <a href="#" className="hover:text-white transition-colors">Social</a>
+            <a href="#" className="hover:text-white transition-colors">Privacy</a>
+            <a href="#" className="hover:text-white transition-colors">Terms</a>
+          </div>
+        </div>
       </div>
 
-      {/* Left Side - Login Form */}
-      <div className="w-full lg:w-[45%] flex items-center justify-center p-6 lg:p-12 relative z-10">
+      {/* Right Side - Login Form with Video Background */}
+      <div className="w-full lg:w-[45%] relative flex items-center justify-center p-6">
+        {/* Video Background */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          data-testid="background-video"
+        >
+          <source 
+            src="https://customer-assets.emergentagent.com/job_b9cc3aae-509a-4338-a133-5fb13a3b9f93/artifacts/8uyja87z_Futuristic_EV_Render_Loop.mp4" 
+            type="video/mp4" 
+          />
+        </video>
+
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-l from-black/80 via-black/60 to-black/40" />
+
+        {/* Mobile Logo */}
+        <div className="lg:hidden absolute top-4 left-4 z-20">
+          <img 
+            src="https://customer-assets.emergentagent.com/job_b9cc3aae-509a-4338-a133-5fb13a3b9f93/artifacts/oksiful9_Logo%20for%20website.png"
+            alt="Go4Garage"
+            className="h-8 w-auto"
+          />
+        </div>
+
+        {/* Login Form Card */}
         <div 
-          className="w-full max-w-md bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-3xl p-8 shadow-2xl"
+          className="w-full max-w-sm bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6 relative z-10"
           data-testid="auth-card"
         >
           {/* EKA-Ai Branding */}
-          <div className="text-center mb-8">
-            <h1 className="font-poppins text-4xl font-bold text-white mb-1">
+          <div className="text-center mb-6">
+            <h1 className="font-poppins text-3xl font-bold text-white">
               EKA-<span className="text-[#FF6B35]">Ai</span>
             </h1>
-            <p className="text-white/50 text-sm">Go4Garage Intelligence Platform</p>
+            <p className="text-white/50 text-xs mt-1">Go4Garage Intelligence</p>
           </div>
 
-          <div className="mb-6">
-            <h2 className="font-poppins text-xl font-semibold text-white mb-1">
+          <div className="mb-5">
+            <h2 className="font-poppins text-lg font-semibold text-white">
               {isLogin ? 'Welcome Back' : 'Create Account'}
             </h2>
-            <p className="text-white/50 text-sm">
-              {isLogin ? 'Sign in to access your dashboard' : 'Register to get started'}
+            <p className="text-white/50 text-xs">
+              {isLogin ? 'Sign in to your dashboard' : 'Register to get started'}
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-3">
             {!isLogin && (
-              <div className="space-y-1.5">
-                <Label htmlFor="name" className="text-white/70 text-sm">Full Name</Label>
+              <div className="space-y-1">
+                <Label htmlFor="name" className="text-white/60 text-xs">Full Name</Label>
                 <Input
                   id="name"
                   data-testid="name-input"
@@ -89,13 +233,13 @@ export default function Auth() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required={!isLogin}
-                  className="bg-white/5 border-white/10 focus:border-[#FF6B35]/50"
+                  className="h-10 bg-white/5 border-white/10 text-sm"
                 />
               </div>
             )}
 
-            <div className="space-y-1.5">
-              <Label htmlFor="email" className="text-white/70 text-sm">Email</Label>
+            <div className="space-y-1">
+              <Label htmlFor="email" className="text-white/60 text-xs">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -104,22 +248,22 @@ export default function Auth() {
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
-                className="bg-white/5 border-white/10 focus:border-[#FF6B35]/50"
+                className="h-10 bg-white/5 border-white/10 text-sm"
               />
             </div>
 
-            <div className="space-y-1.5">
-              <Label htmlFor="password" className="text-white/70 text-sm">Password</Label>
+            <div className="space-y-1">
+              <Label htmlFor="password" className="text-white/60 text-xs">Password</Label>
               <div className="relative">
                 <Input
                   id="password"
                   data-testid="password-input"
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter your password"
+                  placeholder="Enter password"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   required
-                  className="bg-white/5 border-white/10 focus:border-[#FF6B35]/50"
+                  className="h-10 bg-white/5 border-white/10 text-sm"
                 />
                 <button
                   type="button"
@@ -127,18 +271,18 @@ export default function Auth() {
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors"
                   data-testid="toggle-password"
                 >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
 
             {!isLogin && (
-              <div className="space-y-1.5">
-                <Label htmlFor="department" className="text-white/70 text-sm">Department</Label>
+              <div className="space-y-1">
+                <Label htmlFor="department" className="text-white/60 text-xs">Department</Label>
                 <select
                   id="department"
                   data-testid="department-select"
-                  className="flex h-11 w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white focus:border-[#FF6B35]/50 focus:ring-1 focus:ring-[#FF6B35]/50 transition-all outline-none"
+                  className="flex h-10 w-full rounded-lg border border-white/10 bg-white/5 px-3 text-sm text-white focus:border-[#FF6B35]/50 outline-none"
                   value={formData.department}
                   onChange={(e) => setFormData({ ...formData, department: e.target.value })}
                 >
@@ -154,7 +298,7 @@ export default function Auth() {
 
             <Button 
               type="submit" 
-              className="w-full mt-2" 
+              className="w-full h-10 mt-2" 
               disabled={loading}
               data-testid="submit-btn"
             >
@@ -162,8 +306,8 @@ export default function Auth() {
             </Button>
           </form>
 
-          <div className="mt-5 text-center">
-            <p className="text-white/50 text-sm">
+          <div className="mt-4 text-center">
+            <p className="text-white/50 text-xs">
               {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
               <button
                 type="button"
@@ -176,30 +320,11 @@ export default function Auth() {
             </p>
           </div>
 
-          <div className="mt-6 pt-5 border-t border-white/10 flex items-center justify-center gap-2 text-white/30 text-xs">
-            <Shield className="w-3.5 h-3.5 text-teal-400/60" />
-            <span>Powered by <span className="text-teal-400/80">Kailash-Ai</span> • Secured by <span className="text-[#FF6B35]/80">GANESHA</span></span>
+          <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-center gap-1.5 text-white/30 text-[10px]">
+            <Shield className="w-3 h-3 text-teal-400/60" />
+            <span>Powered by <span className="text-teal-400/80">KAILASH</span> • Secured by <span className="text-[#FF6B35]/80">GANESHA</span></span>
           </div>
         </div>
-      </div>
-
-      {/* Right Side - Video Background */}
-      <div className="hidden lg:block lg:w-[55%] relative">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-          data-testid="background-video"
-        >
-          <source 
-            src="https://customer-assets.emergentagent.com/job_b9cc3aae-509a-4338-a133-5fb13a3b9f93/artifacts/8uyja87z_Futuristic_EV_Render_Loop.mp4" 
-            type="video/mp4" 
-          />
-        </video>
-        {/* Gradient overlay for seamless blend */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/40 to-transparent" />
       </div>
     </div>
   );
