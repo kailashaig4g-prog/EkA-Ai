@@ -169,7 +169,7 @@ export default function Auth() {
                 className={`relative bg-gradient-to-br from-[#1a1a1a] to-[#111] border border-white/10 rounded-2xl p-5 overflow-hidden group hover:border-[#FF6B35]/50 transition-all duration-300 cursor-pointer ${
                   index === currentSlide ? 'border-[#FF6B35]/50 scale-[1.02]' : ''
                 }`}
-                onClick={() => setCurrentSlide(index)}
+                onClick={() => handlePromoClick(promo, index)}
                 data-testid={`promo-card-${index}`}
               >
                 {/* Discount Badge */}
