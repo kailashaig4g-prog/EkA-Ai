@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   ArrowLeft, Send, Mic, MicOff, Settings,
@@ -9,6 +9,7 @@ import { Card } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { ScrollArea } from '../components/ui/scroll-area';
 import { aiAPI } from '../services/api';
+import { usePipelineUpdates } from '../hooks/useSocket';
 import useAuthStore from '../store/authStore';
 import { toast } from 'sonner';
 
