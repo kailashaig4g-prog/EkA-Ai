@@ -97,4 +97,11 @@ export const generalAPI = {
   getHealth: () => api.get('/health'),
 };
 
+// Promotions APIs
+export const promotionsAPI = {
+  getPromotions: () => api.get('/promotions'),
+  createPromotion: (data) => api.post('/promotions', data),
+  deletePromotion: (id) => api.delete(`/promotions/${id}`),
+};
+
 export default api;
