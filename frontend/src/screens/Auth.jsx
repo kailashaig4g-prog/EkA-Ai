@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Zap, Shield } from 'lucide-react';
+import { Eye, EyeOff, Shield } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
-import { Card } from '../components/ui/card';
 import { authAPI } from '../services/api';
 import useAuthStore from '../store/authStore';
 import { toast } from 'sonner';
@@ -45,69 +44,44 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] flex">
-      {/* Left side - Hero Image */}
-      <div 
-        className="hidden lg:flex lg:w-[60%] relative bg-cover bg-center"
-        style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1762279388956-1c098163a2a8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njd8MHwxfHNlYXJjaHwyfHxhYnN0cmFjdCUyMGRhdGElMjB2aXN1YWxpemF0aW9uJTIwdGVjaG5vbG9neSUyMGRhcmt8ZW58MHx8fHwxNzY3MjIwODE1fDA&ixlib=rb-4.1.0&q=85')`
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/70 to-transparent" />
-        <div className="relative z-10 flex flex-col justify-center px-12 max-w-xl">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 rounded-xl bg-[#FF6B35] flex items-center justify-center">
-              <Zap className="w-7 h-7 text-white" />
-            </div>
-            <div>
-              <h1 className="font-poppins text-3xl font-bold text-white">EKA-AI</h1>
-              <p className="text-white/60 text-sm">Go4Garage Intelligence</p>
-            </div>
-          </div>
-          <h2 className="font-poppins text-4xl font-semibold text-white mb-4 leading-tight">
-            Enterprise Intelligence <br />
-            <span className="text-[#FF6B35]">Powered by AI</span>
-          </h2>
-          <p className="text-white/70 text-lg leading-relaxed mb-8">
-            Unified platform for EV charging, workshop operations, customer intelligence, and employee training.
-          </p>
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2 text-white/60">
-              <Shield className="w-5 h-5 text-teal-400" />
-              <span className="text-sm">Secured by GANESHA</span>
-            </div>
-            <div className="flex items-center gap-2 text-white/60">
-              <Zap className="w-5 h-5 text-[#FF6B35]" />
-              <span className="text-sm">Powered by KAILASH</span>
-            </div>
-          </div>
-        </div>
+    <div className="min-h-screen bg-[#0a0a0a] flex relative overflow-hidden" data-testid="auth-page">
+      {/* Logo - Top Right */}
+      <div className="absolute top-6 right-6 z-50">
+        <img 
+          src="https://customer-assets.emergentagent.com/job_b9cc3aae-509a-4338-a133-5fb13a3b9f93/artifacts/oksiful9_Logo%20for%20website.png"
+          alt="Go4Garage Logo"
+          className="h-12 w-auto"
+          data-testid="logo"
+        />
       </div>
 
-      {/* Right side - Form */}
-      <div className="w-full lg:w-[40%] flex items-center justify-center p-8">
-        <Card className="w-full max-w-md bg-white/[0.03] backdrop-blur-2xl border-white/10 p-8" data-testid="auth-card">
-          {/* Mobile Logo */}
-          <div className="lg:hidden flex items-center gap-3 mb-8 justify-center">
-            <div className="w-10 h-10 rounded-xl bg-[#FF6B35] flex items-center justify-center">
-              <Zap className="w-6 h-6 text-white" />
-            </div>
-            <h1 className="font-poppins text-2xl font-bold text-white">EKA-AI</h1>
+      {/* Left Side - Login Form */}
+      <div className="w-full lg:w-[45%] flex items-center justify-center p-6 lg:p-12 relative z-10">
+        <div 
+          className="w-full max-w-md bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-3xl p-8 shadow-2xl"
+          data-testid="auth-card"
+        >
+          {/* EKA-Ai Branding */}
+          <div className="text-center mb-8">
+            <h1 className="font-poppins text-4xl font-bold text-white mb-1">
+              EKA-<span className="text-[#FF6B35]">Ai</span>
+            </h1>
+            <p className="text-white/50 text-sm">Go4Garage Intelligence Platform</p>
           </div>
 
-          <div className="text-center mb-8">
-            <h2 className="font-poppins text-2xl font-semibold text-white mb-2">
+          <div className="mb-6">
+            <h2 className="font-poppins text-xl font-semibold text-white mb-1">
               {isLogin ? 'Welcome Back' : 'Create Account'}
             </h2>
-            <p className="text-white/60">
+            <p className="text-white/50 text-sm">
               {isLogin ? 'Sign in to access your dashboard' : 'Register to get started'}
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
-              <div className="space-y-2">
-                <Label htmlFor="name">Full Name</Label>
+              <div className="space-y-1.5">
+                <Label htmlFor="name" className="text-white/70 text-sm">Full Name</Label>
                 <Input
                   id="name"
                   data-testid="name-input"
@@ -115,12 +89,13 @@ export default function Auth() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required={!isLogin}
+                  className="bg-white/5 border-white/10 focus:border-[#FF6B35]/50"
                 />
               </div>
             )}
 
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+            <div className="space-y-1.5">
+              <Label htmlFor="email" className="text-white/70 text-sm">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -129,11 +104,12 @@ export default function Auth() {
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
+                className="bg-white/5 border-white/10 focus:border-[#FF6B35]/50"
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+            <div className="space-y-1.5">
+              <Label htmlFor="password" className="text-white/70 text-sm">Password</Label>
               <div className="relative">
                 <Input
                   id="password"
@@ -143,6 +119,7 @@ export default function Auth() {
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   required
+                  className="bg-white/5 border-white/10 focus:border-[#FF6B35]/50"
                 />
                 <button
                   type="button"
@@ -156,12 +133,12 @@ export default function Auth() {
             </div>
 
             {!isLogin && (
-              <div className="space-y-2">
-                <Label htmlFor="department">Department</Label>
+              <div className="space-y-1.5">
+                <Label htmlFor="department" className="text-white/70 text-sm">Department</Label>
                 <select
                   id="department"
                   data-testid="department-select"
-                  className="flex h-11 w-full rounded-lg border border-white/10 bg-black/20 px-4 py-3 text-base text-white focus:border-[#FF6B35] focus:ring-1 focus:ring-[#FF6B35] transition-all outline-none backdrop-blur-sm"
+                  className="flex h-11 w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white focus:border-[#FF6B35]/50 focus:ring-1 focus:ring-[#FF6B35]/50 transition-all outline-none"
                   value={formData.department}
                   onChange={(e) => setFormData({ ...formData, department: e.target.value })}
                 >
@@ -177,7 +154,7 @@ export default function Auth() {
 
             <Button 
               type="submit" 
-              className="w-full" 
+              className="w-full mt-2" 
               disabled={loading}
               data-testid="submit-btn"
             >
@@ -185,8 +162,8 @@ export default function Auth() {
             </Button>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-white/60">
+          <div className="mt-5 text-center">
+            <p className="text-white/50 text-sm">
               {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
               <button
                 type="button"
@@ -199,12 +176,30 @@ export default function Auth() {
             </p>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-white/10 text-center">
-            <p className="text-white/40 text-sm">
-              Powered by <span className="text-teal-400">Kailash-Ai.in</span> • Secured by <span className="text-[#FF6B35]">GANESHA</span>
-            </p>
+          <div className="mt-6 pt-5 border-t border-white/10 flex items-center justify-center gap-2 text-white/30 text-xs">
+            <Shield className="w-3.5 h-3.5 text-teal-400/60" />
+            <span>Powered by <span className="text-teal-400/80">Kailash-Ai</span> • Secured by <span className="text-[#FF6B35]/80">GANESHA</span></span>
           </div>
-        </Card>
+        </div>
+      </div>
+
+      {/* Right Side - Video Background */}
+      <div className="hidden lg:block lg:w-[55%] relative">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          data-testid="background-video"
+        >
+          <source 
+            src="https://customer-assets.emergentagent.com/job_b9cc3aae-509a-4338-a133-5fb13a3b9f93/artifacts/8uyja87z_Futuristic_EV_Render_Loop.mp4" 
+            type="video/mp4" 
+          />
+        </video>
+        {/* Gradient overlay for seamless blend */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/40 to-transparent" />
       </div>
     </div>
   );
