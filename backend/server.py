@@ -797,17 +797,17 @@ async def get_products():
 
 @api_router.get("/")
 async def root():
-    return {"message": "EKA-AI API v1.0.0", "status": "operational"}
+    return {"message": "EKA-AI API v1.0.0", "status": "operational", "websocket": "enabled"}
 
 @api_router.get("/health")
 async def health():
-    return {"status": "healthy", "timestamp": datetime.now(timezone.utc).isoformat()}
+    return {"status": "healthy", "timestamp": datetime.now(timezone.utc).isoformat(), "websocket": "active"}
 
 
-# Include the router
-app.include_router(api_router)
+# Include the router in the FastAPI app (not the socket.io wrapper)
+fastapi_app.include_router(api_router)
 
-app.add_middleware(
+fastapi_app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
     allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
@@ -822,6 +822,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-@app.on_event("shutdown")
+@fastapi_app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
+
