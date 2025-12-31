@@ -803,6 +803,13 @@ class PromoCreate(BaseModel):
     valid_until: Optional[str] = None
     is_active: bool = True
 
+class PromoClickTrack(BaseModel):
+    promo_id: str
+    promo_title: str
+    source_page: Optional[str] = "auth"
+    user_agent: Optional[str] = None
+    referrer: Optional[str] = None
+
 @api_router.get("/promotions")
 async def get_promotions():
     """Get active promotional offers - public endpoint"""
@@ -825,6 +832,7 @@ async def create_promotion(promo: PromoCreate, current_user: dict = Depends(get_
     promo_data = {
         "id": promo_id,
         **promo.dict(),
+        "click_count": 0,
         "created_by": current_user["id"],
         "created_at": datetime.now(timezone.utc).isoformat()
     }
@@ -836,6 +844,132 @@ async def delete_promotion(promo_id: str, current_user: dict = Depends(get_curre
     """Delete a promotional offer"""
     await db.promotions.delete_one({"id": promo_id})
     return {"status": "deleted"}
+
+@api_router.post("/promotions/track-click")
+async def track_promo_click(click_data: PromoClickTrack):
+    """Track promotional offer click - public endpoint for analytics"""
+    click_id = str(uuid.uuid4())
+    
+    # Store click event
+    click_event = {
+        "id": click_id,
+        "promo_id": click_data.promo_id,
+        "promo_title": click_data.promo_title,
+        "source_page": click_data.source_page,
+        "user_agent": click_data.user_agent,
+        "referrer": click_data.referrer,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+        "hour": datetime.now(timezone.utc).hour
+    }
+    await db.promo_clicks.insert_one(click_event)
+    
+    # Update click count on promotion
+    await db.promotions.update_one(
+        {"id": click_data.promo_id},
+        {"$inc": {"click_count": 1}}
+    )
+    
+    return {"status": "tracked", "click_id": click_id}
+
+@api_router.get("/promotions/analytics")
+async def get_promo_analytics(current_user: dict = Depends(get_current_user)):
+    """Get promotional analytics - requires auth"""
+    
+    # Get total clicks per promotion
+    pipeline = [
+        {"$group": {
+            "_id": "$promo_id",
+            "promo_title": {"$first": "$promo_title"},
+            "total_clicks": {"$sum": 1},
+            "first_click": {"$min": "$timestamp"},
+            "last_click": {"$max": "$timestamp"}
+        }},
+        {"$sort": {"total_clicks": -1}}
+    ]
+    promo_stats = await db.promo_clicks.aggregate(pipeline).to_list(100)
+    
+    # Get clicks by date (last 7 days)
+    date_pipeline = [
+        {"$group": {
+            "_id": "$date",
+            "clicks": {"$sum": 1}
+        }},
+        {"$sort": {"_id": -1}},
+        {"$limit": 7}
+    ]
+    daily_stats = await db.promo_clicks.aggregate(date_pipeline).to_list(7)
+    
+    # Get clicks by hour (for heatmap)
+    hour_pipeline = [
+        {"$group": {
+            "_id": "$hour",
+            "clicks": {"$sum": 1}
+        }},
+        {"$sort": {"_id": 1}}
+    ]
+    hourly_stats = await db.promo_clicks.aggregate(hour_pipeline).to_list(24)
+    
+    # Get total stats
+    total_clicks = await db.promo_clicks.count_documents({})
+    unique_promos = len(promo_stats)
+    
+    # Get top performing promo
+    top_promo = promo_stats[0] if promo_stats else None
+    
+    return {
+        "summary": {
+            "total_clicks": total_clicks,
+            "unique_promos_clicked": unique_promos,
+            "top_promo": top_promo
+        },
+        "promo_stats": promo_stats,
+        "daily_stats": daily_stats,
+        "hourly_stats": hourly_stats
+    }
+
+@api_router.get("/promotions/analytics/{promo_id}")
+async def get_single_promo_analytics(promo_id: str, current_user: dict = Depends(get_current_user)):
+    """Get analytics for a specific promotion"""
+    
+    # Get click count
+    total_clicks = await db.promo_clicks.count_documents({"promo_id": promo_id})
+    
+    # Get clicks by date
+    date_pipeline = [
+        {"$match": {"promo_id": promo_id}},
+        {"$group": {
+            "_id": "$date",
+            "clicks": {"$sum": 1}
+        }},
+        {"$sort": {"_id": -1}},
+        {"$limit": 30}
+    ]
+    daily_clicks = await db.promo_clicks.aggregate(date_pipeline).to_list(30)
+    
+    # Get clicks by source page
+    source_pipeline = [
+        {"$match": {"promo_id": promo_id}},
+        {"$group": {
+            "_id": "$source_page",
+            "clicks": {"$sum": 1}
+        }}
+    ]
+    source_stats = await db.promo_clicks.aggregate(source_pipeline).to_list(10)
+    
+    # Get recent clicks
+    recent_clicks = await db.promo_clicks.find(
+        {"promo_id": promo_id},
+        {"_id": 0}
+    ).sort("timestamp", -1).limit(20).to_list(20)
+    
+    return {
+        "promo_id": promo_id,
+        "total_clicks": total_clicks,
+        "daily_clicks": daily_clicks,
+        "source_stats": source_stats,
+        "recent_clicks": recent_clicks
+    }
 
 
 # ==================== ROOT & HEALTH ====================
