@@ -125,10 +125,12 @@ export default function Home() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link to="/" className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#FF6B35] flex items-center justify-center">
-                  <Zap className="w-6 h-6 text-white" />
-                </div>
-                <span className="font-poppins text-xl font-bold text-white">EKA-AI</span>
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_b9cc3aae-509a-4338-a133-5fb13a3b9f93/artifacts/oksiful9_Logo%20for%20website.png"
+                  alt="Go4Garage"
+                  className="h-9 w-auto"
+                />
+                <span className="font-poppins text-xl font-bold text-white">EKA-<span className="text-[#FF6B35]">Ai</span></span>
               </Link>
             </div>
 
