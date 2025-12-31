@@ -4,7 +4,7 @@ import { Eye, EyeOff, Shield, ChevronLeft, ChevronRight, Zap, Battery, Car } fro
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
-import { authAPI } from '../services/api';
+import { authAPI, promotionsAPI } from '../services/api';
 import useAuthStore from '../store/authStore';
 import { toast } from 'sonner';
 import axios from 'axios';
