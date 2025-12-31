@@ -115,6 +115,7 @@ export default function AskAI() {
   const [selectedCategory, setSelectedCategory] = useState(location.state?.category || 'All');
   const [pipelineSteps, setPipelineSteps] = useState([]);
   const [currentStep, setCurrentStep] = useState(null);
+  const [currentQuestionId, setCurrentQuestionId] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
@@ -126,6 +127,21 @@ export default function AskAI() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Handle real-time pipeline updates from WebSocket
+  const handlePipelineUpdate = useCallback((data) => {
+    if (data.step) {
+      setCurrentStep(data.step);
+      setPipelineSteps(prev => {
+        // Avoid duplicates
+        if (prev.some(s => s.step === data.step)) return prev;
+        return [...prev, { step: data.step, status: 'complete' }];
+      });
+    }
+  }, []);
+
+  // Subscribe to pipeline updates when question is being processed
+  usePipelineUpdates(currentQuestionId, handlePipelineUpdate);
 
   const simulatePipeline = async () => {
     const steps = ['routing', 'drafting', 'verifying', 'delivered'];
@@ -156,11 +172,14 @@ export default function AskAI() {
     setCurrentStep('routing');
 
     try {
-      // Start pipeline simulation
+      // Start pipeline simulation (will be replaced by real WebSocket updates)
       const pipelinePromise = simulatePipeline();
       
       // Make API call
       const response = await aiAPI.ask(userMessage.content, selectedCategory);
+      
+      // Set question ID for WebSocket subscription
+      setCurrentQuestionId(response.data.id);
       
       // Wait for pipeline animation
       await pipelinePromise;
