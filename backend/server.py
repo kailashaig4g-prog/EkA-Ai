@@ -7,12 +7,14 @@ import os
 import logging
 from pathlib import Path
 from pydantic import BaseModel, Field, EmailStr
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 import uuid
 from datetime import datetime, timezone, timedelta
 from passlib.context import CryptContext
 import jwt
 from emergentintegrations.llm.chat import LlmChat, UserMessage
+import socketio
+import asyncio
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -36,11 +38,94 @@ EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY', '')
 # OAuth2
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
-# Create the main app
-app = FastAPI(title="EKA-AI API", version="1.0.0")
+# Socket.IO setup for real-time notifications
+sio = socketio.AsyncServer(
+    async_mode='asgi',
+    cors_allowed_origins='*',
+    logger=True,
+    engineio_logger=False
+)
+
+# Create the main FastAPI app
+fastapi_app = FastAPI(title="EKA-AI API", version="1.0.0")
+
+# Wrap FastAPI with Socket.IO
+app = socketio.ASGIApp(sio, other_asgi_app=fastapi_app)
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
+
+# Store connected clients
+connected_clients: Dict[str, str] = {}  # sid -> user_id
+
+
+# ==================== SOCKET.IO EVENTS ====================
+
+@sio.event
+async def connect(sid, environ):
+    logging.info(f"Client connected: {sid}")
+    await sio.emit('connected', {'message': 'Connected to EKA-AI real-time server'}, to=sid)
+
+@sio.event
+async def disconnect(sid):
+    logging.info(f"Client disconnected: {sid}")
+    if sid in connected_clients:
+        del connected_clients[sid]
+
+@sio.event
+async def authenticate(sid, data):
+    """Authenticate socket connection with JWT token"""
+    try:
+        token = data.get('token')
+        if token:
+            payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+            user_id = payload.get("sub")
+            connected_clients[sid] = user_id
+            await sio.emit('authenticated', {'status': 'success', 'user_id': user_id}, to=sid)
+            logging.info(f"User {user_id} authenticated on socket {sid}")
+    except Exception as e:
+        await sio.emit('authenticated', {'status': 'error', 'message': str(e)}, to=sid)
+
+@sio.event
+async def subscribe_pipeline(sid, data):
+    """Subscribe to pipeline updates for a specific question"""
+    question_id = data.get('question_id')
+    if question_id:
+        await sio.enter_room(sid, f"pipeline_{question_id}")
+        logging.info(f"Client {sid} subscribed to pipeline_{question_id}")
+
+@sio.event
+async def subscribe_station(sid, data):
+    """Subscribe to station updates"""
+    station_id = data.get('station_id')
+    if station_id:
+        await sio.enter_room(sid, f"station_{station_id}")
+
+
+# Helper function to emit notifications
+async def emit_notification(user_id: str, notification: dict):
+    """Emit notification to specific user"""
+    for sid, uid in connected_clients.items():
+        if uid == user_id:
+            await sio.emit('notification', notification, to=sid)
+
+async def emit_pipeline_update(question_id: str, step: str, data: dict = None):
+    """Emit pipeline status update"""
+    await sio.emit('pipeline_update', {
+        'question_id': question_id,
+        'step': step,
+        'timestamp': datetime.now(timezone.utc).isoformat(),
+        'data': data
+    }, room=f"pipeline_{question_id}")
+
+async def emit_station_alert(station_id: str, alert_type: str, message: str):
+    """Emit station alert to all connected clients"""
+    await sio.emit('station_alert', {
+        'station_id': station_id,
+        'alert_type': alert_type,
+        'message': message,
+        'timestamp': datetime.now(timezone.utc).isoformat()
+    })
 
 
 # ==================== MODELS ====================
