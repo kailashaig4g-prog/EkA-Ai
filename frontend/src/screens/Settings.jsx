@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { 
   ArrowLeft, User, Shield, Key, History,
-  Settings as SettingsIcon, Check, X
+  Settings as SettingsIcon, Check, X, BarChart3
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
