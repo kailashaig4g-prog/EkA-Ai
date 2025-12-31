@@ -371,6 +371,9 @@ async def ask_ai(question_data: AskQuestion, current_user: dict = Depends(get_cu
         {"step": "routing", "status": "complete", "agent": "GANESHA", "timestamp": datetime.now(timezone.utc).isoformat()},
     ]
     
+    # Emit real-time pipeline update - routing
+    asyncio.create_task(emit_pipeline_update(question_id, "routing", {"agent": "GANESHA"}))
+    
     # Build system prompt based on category
     system_message = f"""You are KAILASH, the AI answer engine for Go4Garage's EKA-AI platform. 
 You are part of a governance pipeline: EKA Gateway -> GANESHA (router) -> KAILASH (you) -> GANESHA (verifier).
@@ -398,6 +401,9 @@ IMPORTANT: You are responding about Go4Garage services including:
 - ARJUN: Employee training and certifications"""
 
     try:
+        # Emit real-time pipeline update - drafting
+        asyncio.create_task(emit_pipeline_update(question_id, "drafting", {"agent": "KAILASH"}))
+        
         # Use LLM to generate response
         chat = LlmChat(
             api_key=EMERGENT_LLM_KEY,
@@ -414,6 +420,9 @@ IMPORTANT: You are responding about Go4Garage services including:
         
         user_message = UserMessage(text=question_data.question)
         answer = await chat.send_message(user_message)
+        
+        # Emit real-time pipeline update - verifying
+        asyncio.create_task(emit_pipeline_update(question_id, "verifying", {"agent": "GANESHA"}))
         
         pipeline_steps.append({
             "step": "verifying", 
