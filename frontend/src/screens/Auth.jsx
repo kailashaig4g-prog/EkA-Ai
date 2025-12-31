@@ -80,6 +80,31 @@ export default function Auth() {
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % promoSlides.length);
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + promoSlides.length) % promoSlides.length);
 
+  // Track promo click
+  const trackPromoClick = async (promo) => {
+    try {
+      await axios.post(`${BACKEND_URL}/api/promotions/track-click`, {
+        promo_id: promo.id,
+        promo_title: promo.title,
+        source_page: 'auth',
+        user_agent: navigator.userAgent,
+        referrer: document.referrer || 'direct'
+      });
+    } catch (error) {
+      // Silent fail - don't interrupt user experience
+      console.log('Click tracking failed:', error);
+    }
+  };
+
+  const handlePromoClick = (promo, index) => {
+    setCurrentSlide(index);
+    trackPromoClick(promo);
+    toast.info(`${promo.title}`, { 
+      description: 'Sign in to claim this offer!',
+      duration: 3000
+    });
+  };
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] flex" data-testid="auth-page">
       {/* Hide watermark */}
