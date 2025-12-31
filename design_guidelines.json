@@ -1,0 +1,194 @@
+{
+  "design_system": {
+    "identity": {
+      "name": "EKA-AI",
+      "tone": "Omniscient, Precision-Engineered, Futuristic, Authoritative",
+      "aesthetic": "Premium Glassmorphism Control Room",
+      "theme_mode": "dark"
+    },
+    "typography": {
+      "font_family": {
+        "headings": "Poppins, sans-serif",
+        "body": "Inter, sans-serif",
+        "mono": "JetBrains Mono, monospace"
+      },
+      "weights": {
+        "light": 300,
+        "regular": 400,
+        "medium": 500,
+        "semibold": 600,
+        "bold": 700
+      },
+      "styles": {
+        "h1": "font-poppins font-semibold text-5xl tracking-tight leading-tight text-white",
+        "h2": "font-poppins font-medium text-3xl tracking-tight text-white/90",
+        "h3": "font-poppins font-medium text-2xl tracking-normal text-white/90",
+        "body_lg": "font-inter text-lg leading-relaxed text-white/80",
+        "body_base": "font-inter text-base leading-relaxed text-white/70",
+        "caption": "font-inter text-sm text-white/50 uppercase tracking-wider",
+        "label": "font-inter text-xs font-medium text-white/40 uppercase tracking-widest"
+      }
+    },
+    "colors": {
+      "background": {
+        "app": "#0a0a0a",
+        "surface": "#121212",
+        "card": "rgba(255, 255, 255, 0.03)",
+        "card_hover": "rgba(255, 255, 255, 0.06)",
+        "overlay": "rgba(0, 0, 0, 0.7)"
+      },
+      "primary": {
+        "DEFAULT": "#FF6B35",
+        "hover": "#ff8559",
+        "foreground": "#ffffff",
+        "glow": "0 0 20px rgba(255, 107, 53, 0.3)"
+      },
+      "secondary": {
+        "DEFAULT": "#4682B4",
+        "foreground": "#ffffff"
+      },
+      "accent": {
+        "teal": "#008080",
+        "cyan": "#00bcd4",
+        "success": "#10b981",
+        "warning": "#f59e0b",
+        "error": "#ef4444"
+      },
+      "border": {
+        "subtle": "rgba(255, 255, 255, 0.08)",
+        "default": "rgba(255, 255, 255, 0.12)",
+        "highlight": "rgba(255, 255, 255, 0.2)"
+      }
+    },
+    "effects": {
+      "glass": {
+        "base": "backdrop-blur-xl bg-white/5 border border-white/10 shadow-2xl",
+        "heavy": "backdrop-blur-2xl bg-black/40 border border-white/5",
+        "panel": "backdrop-blur-md bg-[#121212]/80 border-r border-white/5"
+      },
+      "shadows": {
+        "glow_primary": "0 0 40px -10px rgba(255, 107, 53, 0.3)",
+        "glow_blue": "0 0 40px -10px rgba(70, 130, 180, 0.3)",
+        "card": "0 8px 32px 0 rgba(0, 0, 0, 0.36)"
+      }
+    },
+    "layout": {
+      "spacing": {
+        "container_padding": "p-6 md:p-8 lg:p-12",
+        "section_gap": "gap-8",
+        "component_gap": "gap-4"
+      },
+      "radius": {
+        "default": "rounded-xl",
+        "button": "rounded-lg",
+        "card": "rounded-2xl"
+      }
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-[#FF6B35] hover:bg-[#ff8559] text-white font-medium px-6 py-2.5 rounded-lg transition-all duration-300 shadow-[0_0_20px_rgba(255,107,53,0.2)] hover:shadow-[0_0_30px_rgba(255,107,53,0.4)] hover:-translate-y-0.5",
+      "secondary": "bg-white/5 hover:bg-white/10 text-white border border-white/10 px-6 py-2.5 rounded-lg transition-all duration-300 backdrop-blur-sm",
+      "ghost": "text-white/70 hover:text-white hover:bg-white/5 px-4 py-2 rounded-lg transition-colors"
+    },
+    "cards": {
+      "dashboard": "relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] backdrop-blur-xl p-6 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.04] group",
+      "product": "h-full flex flex-col justify-between rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.05] to-transparent p-8 hover:border-[#FF6B35]/50 transition-all duration-500 group"
+    },
+    "inputs": {
+      "default": "bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-white/30 focus:border-[#FF6B35] focus:ring-1 focus:ring-[#FF6B35] transition-all outline-none backdrop-blur-sm"
+    },
+    "badges": {
+      "pipeline": "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20",
+      "provenance": "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-white/5 text-white/60 border border-white/10"
+    }
+  },
+  "assets": {
+    "images": {
+      "auth_hero": {
+        "url": "https://images.unsplash.com/photo-1762279388956-1c098163a2a8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njd8MHwxfHNlYXJjaHwyfHxhYnN0cmFjdCUyMGRhdGElMjB2aXN1YWxpemF0aW9uJTIwdGVjaG5vbG9neSUyMGRhcmt8ZW58MHx8fHwxNzY3MjIwODE1fDA&ixlib=rb-4.1.0&q=85",
+        "alt": "Abstract Digital Intelligence",
+        "usage": "Left side of Auth Screen, full height, overlaid with gradient"
+      },
+      "product_urgaa": {
+        "url": "https://images.unsplash.com/photo-1639195046198-a73b6d2d9606?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzZ8MHwxfHNlYXJjaHwxfHxmdXR1cmlzdGljJTIwZXYlMjBjaGFyZ2luZyUyMHN0YXRpb24lMjBuaWdodHxlbnwwfHx8fDE3NjcyMjA4MTF8MA&ixlib=rb-4.1.0&q=85",
+        "alt": "EV Charging Station",
+        "usage": "Background or Hero for URGAA Dashboard"
+      },
+      "product_gstsaas": {
+        "url": "https://images.unsplash.com/photo-1682531046921-4a37f93b85de?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzh8MHwxfHNlYXJjaHwzfHxtb2Rlcm4lMjBhdXRvbW90aXZlJTIwd29ya3Nob3AlMjBtZWNoYW5pY3xlbnwwfHx8fDE3NjcyMjA4MTJ8MA&ixlib=rb-4.1.0&q=85",
+        "alt": "Workshop Mechanic",
+        "usage": "Background or Hero for GSTSAAS Dashboard"
+      },
+      "product_arjun": {
+        "url": "https://images.unsplash.com/photo-1758873269035-aae0e1fd3422?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDN8MHwxfHNlYXJjaHwxfHxjb3Jwb3JhdGUlMjB0cmFpbmluZyUyMHNlc3Npb24lMjBtb2Rlcm4lMjBvZmZpY2V8ZW58MHx8fHwxNzY3MjIwODE0fDA&ixlib=rb-4.1.0&q=85",
+        "alt": "Corporate Training",
+        "usage": "Background or Hero for ARJUN Dashboard"
+      },
+      "product_ignition": {
+        "url": "https://images.unsplash.com/photo-1762279389042-9439bfb6c155?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njd8MHwxfHNlYXJjaHwzfHxhYnN0cmFjdCUyMGRhdGElMjB2aXN1YWxpemF0aW9uJTIwdGVjaG5vbG9neSUyMGRhcmt8ZW58MHx8fHwxNzY3MjIwODE1fDA&ixlib=rb-4.1.0&q=85",
+        "alt": "Data Intelligence",
+        "usage": "Background or Hero for IGNITION Dashboard"
+      }
+    },
+    "icons": {
+      "library": "lucide-react",
+      "style": "Stroke width 1.5px, size 20px or 24px"
+    }
+  },
+  "page_strategies": {
+    "SCR_EKA_AUTH": {
+      "layout": "Split Screen (60% Image / 40% Form)",
+      "visuals": "Use 'auth_hero' image with a heavy gradient overlay (black to transparent). Form container should be glassmorphic.",
+      "key_elements": ["Email/Password Input", "SSO Options", "Forgot Password", "Orange CTA"]
+    },
+    "SCR_EKA_HOME": {
+      "layout": "Bento Grid (Mode A)",
+      "visuals": "Large interactive tiles for each product (URGAA, GSTSAAS, etc.). Use subtle hover zoom effects on background images.",
+      "key_elements": ["Global Search (Top)", "Product Grid", "Department Quick Links", "System Status Ticker"]
+    },
+    "SCR_EKA_ASKAI": {
+      "layout": "Central Chat Interface",
+      "visuals": "Clean, focus-mode layout. Background should be minimal.",
+      "key_elements": [
+        "Pipeline Visualizer (Top): EKA Gateway -> GANESHA -> KAILASH -> GANESHA -> Display",
+        "Chat Input (Bottom): Large, pill-shaped, with voice mic icon",
+        "Message Bubbles: Glassmorphic for user, Transparent for AI",
+        "Provenance Badges: Small citations below AI responses"
+      ]
+    },
+    "SCR_EKA_JOB_CARD": {
+      "layout": "Form + Voice Visualizer",
+      "visuals": "Split view. Left: Structured Form. Right: Voice Input Visualization (Waveform).",
+      "key_elements": ["Voice Record Button (Pulse Effect)", "Live Transcription Text", "Field Auto-fill Animation"]
+    }
+  },
+  "universal_guidelines": {
+    "general": [
+      "Dark colors look good when used independently without gradients. DO NOT use dark colors as gradients.",
+      "Don't make generic centered layouts, simplistic gradients, and uniform styling.",
+      "Create depth through layered design elements with z-index hierarchy.",
+      "Use glass-morphism effects with backdrop filters (12-24px blur).",
+      "You MUST NOT apply universal transition. Eg: transition: all. This results in breaking transforms.",
+      "You MUST NOT center align the app container.",
+      "Always use modern button styles like pill-shaped, or sharp button with interaction animations.",
+      "NEVER use AI assistant Emoji characters.",
+      "Every interaction needs micro-animations.",
+      "Use 2-3x more spacing than feels comfortable.",
+      "Subtle grain textures, noise overlays, custom cursors, selection states, and loading animations.",
+      "All interactive and key informational elements MUST include a data-testid attribute."
+    ],
+    "component_reuse": [
+      "Prioritize using pre-existing components from src/components/ui when applicable.",
+      "Create new components that match the style and conventions of existing components when needed."
+    ],
+    "export_conventions": [
+      "Components MUST use named exports (export const ComponentName = ...).",
+      "Pages MUST use default exports (export default function PageName() {...})."
+    ],
+    "toasts": [
+      "Use sonner for toasts.",
+      "Sonner component are located in /app/frontend/src/components/ui/sonner.tsx"
+    ]
+  }
+}
