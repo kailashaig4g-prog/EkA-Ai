@@ -1,5 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
+/* Hide platform watermark */
+[class*="watermark"], [class*="Watermark"], 
+[id*="watermark"], [id*="Watermark"],
+[data-testid*="watermark"], [data-testid*="Watermark"],
+a[href*="emergent"], div:has(> a[href*="emergent"]),
+.fixed.bottom-0.right-0, .fixed.bottom-4.right-4,
+div[style*="position: fixed"][style*="bottom"][style*="right"],
+div[style*="z-index: 9999"], div[style*="z-index:9999"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
 * {
   box-sizing: border-box;
 }
