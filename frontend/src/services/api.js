@@ -102,6 +102,9 @@ export const promotionsAPI = {
   getPromotions: () => api.get('/promotions'),
   createPromotion: (data) => api.post('/promotions', data),
   deletePromotion: (id) => api.delete(`/promotions/${id}`),
+  trackClick: (data) => api.post('/promotions/track-click', data),
+  getAnalytics: () => api.get('/promotions/analytics'),
+  getPromoAnalytics: (id) => api.get(`/promotions/analytics/${id}`),
 };
 
 export default api;
