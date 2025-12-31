@@ -390,7 +390,7 @@ async def get_chat_history(current_user: dict = Depends(get_current_user)):
 
 # ==================== JOB CARD ROUTES ====================
 
-@api_router.post("/gstsaas/job-card", response_model=JobCardResponse)
+@api_router.post("/gstsaas/job-card", response_model=JobCardResponse, status_code=status.HTTP_201_CREATED)
 async def create_job_card(job_data: JobCardCreate, current_user: dict = Depends(get_current_user)):
     job_id = str(uuid.uuid4())
     
@@ -517,7 +517,7 @@ async def get_churn_risks(current_user: dict = Depends(get_current_user)):
 
 # ==================== SUPPORT ROUTES ====================
 
-@api_router.post("/support/tickets", response_model=TicketResponse)
+@api_router.post("/support/tickets", response_model=TicketResponse, status_code=status.HTTP_201_CREATED)
 async def create_ticket(ticket_data: TicketCreate, current_user: dict = Depends(get_current_user)):
     ticket_id = str(uuid.uuid4())
     count = await db.tickets.count_documents({})
