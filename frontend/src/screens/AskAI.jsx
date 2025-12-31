@@ -259,7 +259,7 @@ export default function AskAI() {
                 </Button>
               </Link>
               <div>
-                <h1 className="font-poppins text-xl font-semibold text-white">Ask EKA-AI</h1>
+                <h1 className="font-poppins text-xl font-semibold text-white">Ask EKA-<span className="text-[#FF6B35]">Ai</span></h1>
                 <p className="text-white/60 text-sm">Powered by KAILASH • Verified by GANESHA</p>
               </div>
             </div>
